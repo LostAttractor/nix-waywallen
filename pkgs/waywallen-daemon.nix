@@ -8,17 +8,18 @@
 , wayland
 , libgbm
 , libxkbcommon
+, libpulseaudio
 , makeWrapper
 , src
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "waywallen-daemon";
-  version = "0.2.5";
+  version = "0.3.3";
 
   inherit src;
 
-  cargoHash = "sha256-jBZX5x/pIgy1IPuP6cbWaWtpKuUU7be8gwZSZLmCjkE=";
+  cargoHash = "sha256-29DXBGXRHWisZC22dn8hV1fWs6eqLPVtCyHCf+lEHxg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -33,6 +34,7 @@ rustPlatform.buildRustPackage rec {
     wayland
     libgbm
     libxkbcommon
+    libpulseaudio
   ];
 
   cargoBuildFlags = [ "-p" "waywallen" ];

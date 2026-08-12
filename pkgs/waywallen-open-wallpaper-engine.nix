@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  llvmPackages, # upstream clang 22 + manylinux-compatible libstdc++ (see upstream-clang.nix)
+  llvmPackages_latest,
   callPackage,
   cmake,
   pkg-config,
@@ -54,10 +54,11 @@
   deps = {
     rstd = fetchDep "rstd";
     wavsen = fetchDep "wavsen";
+    vma = fetchDep "vma";
+    vvk = fetchDep "vvk";
     eigen = fetchDep "eigen";
     spirv_reflect = fetchDep "spirv_reflect";
     glslang_src = fetchDep "glslang";
-    argparse = fetchDep "argparse";
     quickjs = fetchDep "quickjs";
 
     # CEF is a prebuilt binary distro; autoPatchelfHook rewrites interpreter /
@@ -101,9 +102,9 @@
     };
   };
 in
-  llvmPackages.stdenv.mkDerivation {
+  llvmPackages_latest.stdenv.mkDerivation {
     pname = "waywallen-open-wallpaper-engine";
-    version = "0.1.12";
+    version = "0.2.3";
 
     inherit src;
 
@@ -124,8 +125,8 @@ in
       pkg-config
       ninja
       glslang # glslangValidator for wavsen shader compilation
-      llvmPackages.clang-tools # clang-scan-deps for C++20 module scanning
-      llvmPackages.lld # faster linker; required by upstream CMake config
+      llvmPackages_latest.clang-tools # clang-scan-deps for C++20 module scanning
+      llvmPackages_latest.lld # faster linker; required by upstream CMake config
       patchelf # used in postFixup to patch libcef.so RPATH
     ];
 
@@ -142,10 +143,8 @@ in
       libGL # also used in postFixup RPATH for libcef.so
       expat
       waywallen-plugins
-      llvmPackages.libstdcxx
+      libx11 # waywallen-weweb-renderer needs X11 to link libcef_dll_wrapper
     ];
-
-    NIX_LDFLAGS = llvmPackages.libstdcxxLinkFlags;
 
     cmakeFlags = [
       "-DBUILD_WEWEB=ON" # CEF-based web wallpaper renderer
@@ -154,16 +153,17 @@ in
       "-DBUILD_TESTS=OFF"
       "-DBUILD_WAYWALLEN=ON"
       # Point CMake's clang module scanner at the Nix-store clang-tools binary
-      "-DCMAKE_CXX_COMPILER_CLANG_SCAN_DEPS=${llvmPackages.clang-tools}/bin/clang-scan-deps"
+      "-DCMAKE_CXX_COMPILER_CLANG_SCAN_DEPS=${llvmPackages_latest.clang-tools}/bin/clang-scan-deps"
       # Provide the waywallen IPC bridge cmake config from the plugins package
       "-Dwaywallen-bridge_DIR=${waywallen-plugins}/lib/cmake/waywallen-bridge"
       # Redirect all FetchContent calls to pre-fetched Nix store paths
       "-DFETCHDEPS_LOCAL_rstd=${deps.rstd}"
       "-DFETCHDEPS_LOCAL_wavsen=${deps.wavsen}"
+      "-DFETCHDEPS_LOCAL_vma=${deps.vma}"
+      "-DFETCHDEPS_LOCAL_vvk=${deps.vvk}"
       "-DFETCHDEPS_LOCAL_eigen=${deps.eigen}"
       "-DFETCHDEPS_LOCAL_spirv_reflect=${deps.spirv_reflect}"
       "-DFETCHDEPS_LOCAL_glslang=${deps.glslang_src}"
-      "-DFETCHDEPS_LOCAL_argparse=${deps.argparse}"
       "-DFETCHDEPS_LOCAL_quickjs=${deps.quickjs}"
       "-DFETCHDEPS_LOCAL_cef=${deps.cef}"
     ];
