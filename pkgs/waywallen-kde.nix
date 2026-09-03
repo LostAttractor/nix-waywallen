@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation {
   pname = "waywallen-display-kde";
-  version = "0.3.1";
+  version = "0.3.3";
 
   inherit src;
 

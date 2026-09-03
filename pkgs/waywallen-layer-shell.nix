@@ -4,28 +4,22 @@
 , wayland
 , libGL
 , vulkan-loader
+, glslang
 , makeWrapper
 , src
 }:
 
 rustPlatform.buildRustPackage {
   pname = "waywallen-layer-shell";
-    version = "0.3.1";
+  version = "0.3.3";
 
   inherit src;
 
-  # The waywallen-display repo does not commit a Cargo.lock (it is a library
-  # crate and its .gitignore excludes Cargo.lock). We carry a generated
-  # snapshot and inject it at patch time. Regenerate with:
-  #   cargo generate-lockfile   # in a checkout of waywallen-display
-  cargoLock.lockFile = ./waywallen-display.Cargo.lock;
-
-  postPatch = ''
-    cp ${./waywallen-display.Cargo.lock} Cargo.lock
-  '';
+  cargoLock.lockFile = "${src}/Cargo.lock";
 
   nativeBuildInputs = [
     pkg-config
+    glslang
     makeWrapper
   ];
 

@@ -1,11 +1,9 @@
 diff --git a/extensions/gnome/renderer/renderer.js b/extensions/gnome/renderer/renderer.js
-index 6d83b51..2b7741c 100755
 --- a/extensions/gnome/renderer/renderer.js
 +++ b/extensions/gnome/renderer/renderer.js
-@@ -303,15 +303,10 @@ class MonitorRenderer {
-     }
- 
-     _onTexturesReady(count, w, h, fourcc, _modifier, backend) {
+@@ -340,14 +340,9 @@ class MonitorRenderer {
+     _onBindingReady(count, w, h, fourcc, _modifier, backend,
+         sx, sy, sw, sh, dx, dy, dw, dh, transform, cr, cg, cb, ca) {
 -        const [ok, sfd, nPlanes, strides, offsets, smod] =
 -            this._display.get_shadow_export();
 -        if (!ok) {
@@ -21,7 +19,6 @@ index 6d83b51..2b7741c 100755
          this._texH = h;
          this._fourcc = fourcc;
 diff --git a/plugins/gobject/ww-shadow-paintable.c b/plugins/gobject/ww-shadow-paintable.c
-index 3a71c22..abe5627 100644
 --- a/plugins/gobject/ww-shadow-paintable.c
 +++ b/plugins/gobject/ww-shadow-paintable.c
 @@ -1,5 +1,6 @@
@@ -31,8 +28,9 @@ index 3a71c22..abe5627 100644
  
  #include <graphene.h>
  #include <gtk/gtk.h>
-@@ -299,3 +300,27 @@ void ww_shadow_paintable_clear(WwShadowPaintable* self) {
-     self->have_shadow = FALSE;
+@@ -306,4 +307,28 @@ void ww_shadow_paintable_clear(WwShadowPaintable* self) {
+     self->clear[2]  = 0.0f;
+     self->clear[3]  = 1.0f;
      gdk_paintable_invalidate_contents(GDK_PAINTABLE(self));
  }
 +
@@ -60,14 +58,12 @@ index 3a71c22..abe5627 100644
 +    return res;
 +}
 diff --git a/plugins/gobject/ww-shadow-paintable.h b/plugins/gobject/ww-shadow-paintable.h
-index 1140576..630468a 100644
 --- a/plugins/gobject/ww-shadow-paintable.h
 +++ b/plugins/gobject/ww-shadow-paintable.h
-@@ -89,6 +89,28 @@ void ww_shadow_paintable_set_config(WwShadowPaintable* self, double sx, double s
-  * Release the texture + shadow fd; paintable renders empty until the
-  * next set_shadow().
-  */
-+/* Forward declaration */
+@@ -83,2 +83,23 @@ void ww_shadow_paintable_set_composition(WwShadowPaintable* self, double sx, dou
+                                         guint transform, double cr, double cg, double cb,
+                                         double ca);
++
 +typedef struct _WwDisplay WwDisplay;
 +
 +/**
@@ -88,7 +84,3 @@ index 1140576..630468a 100644
 +                                                     guint              width,
 +                                                     guint              height,
 +                                                     guint              fourcc);
-+
- void ww_shadow_paintable_clear(WwShadowPaintable* self);
- 
- G_END_DECLS

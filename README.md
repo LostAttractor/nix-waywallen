@@ -6,12 +6,12 @@ This repository contains a Nix Flake that packages [Waywallen](https://github.co
 
 This flake exports the following packages:
 
-- **`waywallen`**: The unified, combined package containing the Waywallen daemon, UI, renderer plugins (image, video), and the open wallpaper engine plugin. This is the primary package you should install.
+- **`waywallen`**: The unified package containing the Waywallen daemon, UI, renderer plugins (image, video), and the open wallpaper engine plugin. This is the primary package you should install. It is packaged from the official architecture-specific release artifacts.
 - **`waywallen-layer-shell`**: The Wayland layer-shell display backend.
 - **`waywallen-kde`**: KDE Plasma plugin for the Waywallen display.
 - **`waywallen-gnome`**: GNOME Shell extension for the Waywallen display.
 
-*(Individual components like `waywallen-daemon`, `waywallen-ui`, and `waywallen-plugins` are also exported for advanced configurations, but most users only need the unified `waywallen` package).*
+`waywallen-daemon` remains available as a standalone source-built package. The `waywallen-ui`, `waywallen-plugins`, and `waywallen-open-wallpaper-engine` attributes are compatibility aliases for the unified official release because upstream now builds and ships these components together with Lito.
 
 ## Installation
 
@@ -40,4 +40,3 @@ outputs = { self, nixpkgs, nix-waywallen, ... }: {
   };
 };
 ```
-
