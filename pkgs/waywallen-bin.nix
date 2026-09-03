@@ -155,6 +155,19 @@ stdenv.mkDerivation {
   '';
 
   postFixup = ''
+    # The renderers load their audio backend at runtime, which autoPatchelf cannot detect.
+    for renderer in \
+      "$out/bin/waywallen-video-renderer" \
+      "$out/share/waywallen/plugins/org.waywallen.open-wallpaper-engine/bin/waywallen-wescene-renderer"
+    do
+      wrapProgram "$renderer" \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libpulseaudio ]}"
+    done
+
+    # CEF also loads PulseAudio at runtime, while ANGLE dlopens the native EGL dispatcher.
+    wrapProgram "$out/share/waywallen/plugins/org.waywallen.open-wallpaper-engine/lib/weweb/waywallen-weweb-renderer" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL libpulseaudio ]}"
+
     wrapProgram "$out/bin/waywallen-ui" \
       --prefix LD_LIBRARY_PATH : "$out/lib" \
       --suffix LIBVA_DRIVERS_PATH : "/run/opengl-driver/lib/dri" \
