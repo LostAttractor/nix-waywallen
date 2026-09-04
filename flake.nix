@@ -16,45 +16,49 @@
     };
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    waywallen-src,
-    waywallen-display-src,
-  }: let
-    supportedSystems = ["x86_64-linux" "aarch64-linux"];
-    forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
-    nixpkgsFor = forAllSystems (system: import nixpkgs {inherit system;});
-  in {
-    packages = forAllSystems (
-      system: let
-        pkgs = nixpkgsFor.${system};
-        waywallen = pkgs.callPackage ./pkgs/waywallen-bin.nix {};
-        waywallen-daemon = pkgs.callPackage ./pkgs/waywallen-daemon.nix {src = waywallen-src;};
-        waywallen-layer-shell = pkgs.callPackage ./pkgs/waywallen-layer-shell.nix {src = waywallen-display-src;};
-        waywallen-kde = pkgs.callPackage ./pkgs/waywallen-kde.nix {src = waywallen-display-src;};
-        waywallen-gnome = pkgs.callPackage ./pkgs/waywallen-gnome.nix {src = waywallen-display-src;};
-      in rec {
-        inherit waywallen waywallen-daemon waywallen-layer-shell waywallen-kde waywallen-gnome;
+  outputs =
+    {
+      nixpkgs,
+      waywallen-src,
+      waywallen-display-src,
+      ...
+    }:
+    let
+      supportedSystems = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
+      forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+      mkPackages =
+        pkgs:
+        import ./pkgs {
+          inherit pkgs waywallen-src waywallen-display-src;
+        };
+    in
+    {
+      packages = forAllSystems (
+        system:
+        let
+          packages = mkPackages (import nixpkgs { inherit system; });
+        in
+        packages
+        // {
+          # Compatibility aliases: the official release now ships these together.
+          waywallen-ui = packages.waywallen;
+          waywallen-plugins = packages.waywallen;
+          waywallen-open-wallpaper-engine = packages.waywallen;
 
-        # Compatibility aliases: the official release now ships these together.
-        waywallen-ui = waywallen;
-        waywallen-plugins = waywallen;
-        waywallen-open-wallpaper-engine = waywallen;
+          default = packages.waywallen;
+        }
+      );
 
-        default = waywallen;
-      }
-    );
-
-    overlays.default = final: prev: {
-      waywallen = final.callPackage ./pkgs/waywallen-bin.nix {};
-      waywallen-daemon = final.callPackage ./pkgs/waywallen-daemon.nix {src = waywallen-src;};
-      waywallen-layer-shell = final.callPackage ./pkgs/waywallen-layer-shell.nix {src = waywallen-display-src;};
-      waywallen-kde = final.callPackage ./pkgs/waywallen-kde.nix {src = waywallen-display-src;};
-      waywallen-gnome = final.callPackage ./pkgs/waywallen-gnome.nix {src = waywallen-display-src;};
-      waywallen-ui = final.waywallen;
-      waywallen-plugins = final.waywallen;
-      waywallen-open-wallpaper-engine = final.waywallen;
+      overlays.default =
+        final: _:
+        mkPackages final
+        // {
+          waywallen-ui = final.waywallen;
+          waywallen-plugins = final.waywallen;
+          waywallen-open-wallpaper-engine = final.waywallen;
+        };
     };
-  };
 }

@@ -1,19 +1,16 @@
-{ lib
-, rustPlatform
-, pkg-config
-, protobuf
-, sqlite
-, libGL
-, vulkan-loader
-, wayland
-, libgbm
-, libxkbcommon
-, libpulseaudio
-, makeWrapper
-, src
+{
+  lib,
+  rustPlatform,
+  pkg-config,
+  protobuf,
+  sqlite,
+  vulkan-loader,
+  libpulseaudio,
+  makeWrapper,
+  src,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "waywallen-daemon";
   version = "0.3.8";
 
@@ -29,22 +26,16 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     sqlite
-    libGL
-    vulkan-loader
-    wayland
-    libgbm
-    libxkbcommon
     libpulseaudio
   ];
 
-  cargoBuildFlags = [ "-p" "waywallen" ];
   doCheck = false;
 
   postInstall = ''
     wrapProgram $out/bin/waywallen \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL vulkan-loader wayland libgbm libxkbcommon ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio ]}
     wrapProgram $out/bin/waywallen_renderer \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL vulkan-loader wayland libgbm libxkbcommon ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
   meta = with lib; {
@@ -52,5 +43,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/waywallen/waywallen";
     license = licenses.mit;
     platforms = platforms.linux;
+    mainProgram = "waywallen";
   };
 }

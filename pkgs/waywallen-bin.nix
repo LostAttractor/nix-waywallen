@@ -25,7 +25,6 @@
   libva,
   libxkbcommon,
   lz4,
-  mesa,
   nspr,
   nss,
   pango,
@@ -45,37 +44,39 @@ let
   pname = "waywallen";
   version = "0.3.8";
   oweVersion = "0.2.9";
+  owePluginPath = "share/waywallen/plugins/org.waywallen.open-wallpaper-engine";
 
-  sources = {
+  releases = {
     x86_64-linux = {
-      appimage = fetchurl {
-        url = "https://github.com/waywallen/waywallen/releases/download/v${version}/waywallen-${version}-x86_64.AppImage";
-        hash = "sha256-nPyH0kdlNNIZTZW6QxrcdDv0ydekj1i8FrRcmMoDgW4=";
-      };
-      owe = fetchurl {
-        url = "https://github.com/waywallen/open-wallpaper-engine/releases/download/v${oweVersion}/org.waywallen.open-wallpaper-engine-${oweVersion}-linux-x86_64.zip";
-        hash = "sha256-MM/uWgQzIOD7GUtEfMegfexd+KsjgSHy82LI97aCAng=";
-      };
+      arch = "x86_64";
+      appimageHash = "sha256-nPyH0kdlNNIZTZW6QxrcdDv0ydekj1i8FrRcmMoDgW4=";
+      oweHash = "sha256-MM/uWgQzIOD7GUtEfMegfexd+KsjgSHy82LI97aCAng=";
     };
     aarch64-linux = {
-      appimage = fetchurl {
-        url = "https://github.com/waywallen/waywallen/releases/download/v${version}/waywallen-${version}-aarch64.AppImage";
-        hash = "sha256-j91+RHIX87PcJszKy2ISVMbk5VvOI+vuxhxJ8PJBHrU=";
-      };
-      owe = fetchurl {
-        url = "https://github.com/waywallen/open-wallpaper-engine/releases/download/v${oweVersion}/org.waywallen.open-wallpaper-engine-${oweVersion}-linux-aarch64.zip";
-        hash = "sha256-wW81CmUsM8W3NPPiHm71XzETlPxQ7+gpzTLwHFSviCc=";
-      };
+      arch = "aarch64";
+      appimageHash = "sha256-j91+RHIX87PcJszKy2ISVMbk5VvOI+vuxhxJ8PJBHrU=";
+      oweHash = "sha256-wW81CmUsM8W3NPPiHm71XzETlPxQ7+gpzTLwHFSviCc=";
     };
   };
 
-  source =
-    sources.${stdenv.hostPlatform.system}
+  release =
+    releases.${stdenv.hostPlatform.system}
       or (throw "waywallen: unsupported system ${stdenv.hostPlatform.system}");
+
+  sources = {
+    appimage = fetchurl {
+      url = "https://github.com/waywallen/waywallen/releases/download/v${version}/waywallen-${version}-${release.arch}.AppImage";
+      hash = release.appimageHash;
+    };
+    owe = fetchurl {
+      url = "https://github.com/waywallen/open-wallpaper-engine/releases/download/v${oweVersion}/org.waywallen.open-wallpaper-engine-${oweVersion}-linux-${release.arch}.zip";
+      hash = release.oweHash;
+    };
+  };
 
   appimageContents = appimageTools.extract {
     inherit pname version;
-    src = source.appimage;
+    src = sources.appimage;
   };
 in
 stdenv.mkDerivation {
@@ -113,7 +114,6 @@ stdenv.mkDerivation {
     libva
     libxkbcommon
     lz4
-    mesa
     nspr
     nss
     pango
@@ -139,9 +139,9 @@ stdenv.mkDerivation {
     cp -a ${appimageContents}/usr/. "$out/"
     chmod -R u+w "$out"
 
-    owe="$out/share/waywallen/plugins/org.waywallen.open-wallpaper-engine"
+    owe="$out/${owePluginPath}"
     mkdir -p "$owe"
-    unzip -q ${source.owe} -d "$owe"
+    unzip -q ${sources.owe} -d "$owe"
 
     # Use the host Vulkan loader and drivers. CEF's ANGLE libraries stay bundled.
     rm -f \
@@ -158,29 +158,32 @@ stdenv.mkDerivation {
     # The renderers load their audio backend at runtime, which autoPatchelf cannot detect.
     for renderer in \
       "$out/bin/waywallen-video-renderer" \
-      "$out/share/waywallen/plugins/org.waywallen.open-wallpaper-engine/bin/waywallen-wescene-renderer"
+      "$out/${owePluginPath}/bin/waywallen-wescene-renderer"
     do
       wrapProgram "$renderer" \
         --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libpulseaudio ]}"
     done
 
     # CEF also loads PulseAudio at runtime, while ANGLE dlopens the native EGL dispatcher.
-    wrapProgram "$out/share/waywallen/plugins/org.waywallen.open-wallpaper-engine/lib/weweb/waywallen-weweb-renderer" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL libpulseaudio ]}"
+    wrapProgram "$out/${owePluginPath}/lib/weweb/waywallen-weweb-renderer" \
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          libGL
+          libpulseaudio
+        ]
+      }"
 
-    wrapProgram "$out/bin/waywallen-ui" \
-      --prefix LD_LIBRARY_PATH : "$out/lib" \
-      --suffix LIBVA_DRIVERS_PATH : "/run/opengl-driver/lib/dri" \
-      --set QT_PLUGIN_PATH "$out/plugins" \
-      --set QML_IMPORT_PATH "$out/qml" \
+    appWrapperArgs=(
+      --prefix LD_LIBRARY_PATH : "$out/lib"
+      --suffix LIBVA_DRIVERS_PATH : "/run/opengl-driver/lib/dri"
+      --set QT_PLUGIN_PATH "$out/plugins"
+      --set QML_IMPORT_PATH "$out/qml"
       --set QML2_IMPORT_PATH "$out/qml"
+    )
 
+    wrapProgram "$out/bin/waywallen-ui" "''${appWrapperArgs[@]}"
     wrapProgram "$out/bin/waywallen" \
-      --prefix LD_LIBRARY_PATH : "$out/lib" \
-      --suffix LIBVA_DRIVERS_PATH : "/run/opengl-driver/lib/dri" \
-      --set QT_PLUGIN_PATH "$out/plugins" \
-      --set QML_IMPORT_PATH "$out/qml" \
-      --set QML2_IMPORT_PATH "$out/qml" \
+      "''${appWrapperArgs[@]}" \
       --add-flags "--ui $out/bin/waywallen-ui --plugin $out/share/waywallen"
   '';
 
@@ -192,7 +195,7 @@ stdenv.mkDerivation {
       gpl2Only
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    platforms = builtins.attrNames sources;
+    platforms = builtins.attrNames releases;
     mainProgram = "waywallen";
   };
 }

@@ -1,13 +1,12 @@
-{ lib
-, stdenv
-, cmake
-, pkg-config
-, qt6
-, vulkan-headers
-, libGL
-, libgbm
-, vulkan-loader
-, src
+{
+  lib,
+  stdenv,
+  cmake,
+  pkg-config,
+  qt6,
+  libGL,
+  vulkan-loader,
+  src,
 }:
 
 stdenv.mkDerivation {
@@ -25,25 +24,19 @@ stdenv.mkDerivation {
   buildInputs = [
     qt6.qtbase
     qt6.qtdeclarative
-    vulkan-headers
     libGL
-    libgbm
     vulkan-loader
   ];
 
   cmakeFlags = [
     "-DWAYWALLEN_DISPLAY_PLUGIN_QML=ON"
-    "-DWAYWALLEN_DISPLAY_BUILD_TESTS=OFF"
-    "-DWAYWALLEN_DISPLAY_BUILD_EXAMPLES=OFF"
+    "-DQML_INSTALL_DIR=${builtins.placeholder "out"}/${qt6.qtbase.qtQmlPrefix}"
   ];
 
   postInstall = ''
-    mkdir -p $out/share/plasma/wallpapers/org.waywallen.kde
-    cp -r ../extensions/kde/package/* $out/share/plasma/wallpapers/org.waywallen.kde/
-
-    mkdir -p $out/${qt6.qtbase.qtQmlPrefix}
-    mv $out/lib/qt6/qml/* $out/${qt6.qtbase.qtQmlPrefix}/
-    rm -rf $out/lib/qt6
+    cmake --install . \
+      --component kde_extension \
+      --prefix "$out/share/plasma/wallpapers"
   '';
 
   meta = with lib; {

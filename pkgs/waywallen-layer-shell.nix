@@ -1,12 +1,12 @@
-{ lib
-, rustPlatform
-, pkg-config
-, wayland
-, libGL
-, vulkan-loader
-, glslang
-, makeWrapper
-, src
+{
+  lib,
+  rustPlatform,
+  pkg-config,
+  wayland,
+  vulkan-loader,
+  glslang,
+  makeWrapper,
+  src,
 }:
 
 rustPlatform.buildRustPackage {
@@ -25,17 +25,22 @@ rustPlatform.buildRustPackage {
 
   buildInputs = [
     wayland
-    libGL       # provides egl.pc for build.rs
-    vulkan-loader  # provides vulkan.pc for build.rs
+    vulkan-loader # provides vulkan.pc for build.rs
   ];
 
   # Build only the layer-shell binary with Vulkan support enabled for the dmabuf relay.
-  cargoBuildFlags = [ "--no-default-features" "--features" "vulkan,layer-shell" "--bin" "waywallen-layer-shell" ];
+  cargoBuildFlags = [
+    "--no-default-features"
+    "--features"
+    "vulkan,layer-shell"
+    "--bin"
+    "waywallen-layer-shell"
+  ];
   doCheck = false;
 
   postInstall = ''
     wrapProgram $out/bin/waywallen-layer-shell \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ wayland vulkan-loader ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
   meta = with lib; {
