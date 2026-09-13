@@ -43,19 +43,19 @@
 let
   pname = "waywallen";
   version = "0.3.9";
-  oweVersion = "0.2.9";
+  oweVersion = "0.2.10";
   owePluginPath = "share/waywallen/plugins/org.waywallen.open-wallpaper-engine";
 
   releases = {
     x86_64-linux = {
       arch = "x86_64";
       appimageHash = "sha256-499tPXymKD0Owftj/Asgu08ZmHBMuFKPHdsR+ribmt8=";
-      oweHash = "sha256-MM/uWgQzIOD7GUtEfMegfexd+KsjgSHy82LI97aCAng=";
+      oweHash = "sha256-cDx3aRL9tB/9JhPPvgmuHZQuQJFHLvTalNAoZkwMDMs=";
     };
     aarch64-linux = {
       arch = "aarch64";
       appimageHash = "sha256-0e3f7t3Qwq6cg20c75bmdbVULLaheWAugP/M4vQWFPA=";
-      oweHash = "sha256-wW81CmUsM8W3NPPiHm71XzETlPxQ7+gpzTLwHFSviCc=";
+      oweHash = "sha256-gQs23Ea8KnCFtdoytSP4QRed2NrcIdJ0r5eGKjM7n0w=";
     };
   };
 
