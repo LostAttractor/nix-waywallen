@@ -61,6 +61,19 @@
         }
       );
 
+      checks = forAllSystems (
+        system:
+        let
+          pkgs = import nixpkgs { inherit system; };
+        in
+        {
+          runtime = pkgs.callPackage ./tests/runtime.nix {
+            inherit waywallen-src;
+            waywallen = (mkPackages pkgs).waywallen;
+          };
+        }
+      );
+
       overlays.default =
         final: _:
         mkPackages final

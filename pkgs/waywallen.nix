@@ -1,16 +1,8 @@
 {
   lib,
-  llvmPackages_22,
-  lito,
-  fetchLitoDeps,
-  cmake,
-  ninja,
-  pkg-config,
-  glslang,
-  git,
-  autoPatchelfHook,
-  autoAddDriverRunpath,
+  buildLitoPackage,
   qt6,
+  qadwaitadecorations-qt6,
   protobuf,
   ffmpeg,
   libgbm,
@@ -23,40 +15,14 @@
   waywallen-daemon,
   src,
 }:
-let
+buildLitoPackage {
   pname = "waywallen";
   version = "0.3.9";
+  inherit src;
   patches = [ ./patches/waywallen-external-daemon.patch ];
-  litoDeps = fetchLitoDeps {
-    inherit
-      pname
-      version
-      src
-      patches
-      ;
-    hash = "sha256-+y/3Sk4bEVdT6dgPVTDiq0XnZz6oveWsG8B5wQnVs18=";
-  };
-in
-llvmPackages_22.stdenv.mkDerivation {
-  inherit
-    pname
-    version
-    src
-    patches
-    ;
+  litoHash = "sha256-b98ld+64aY5G+xWpftwx5I7BUemF67xs+E/wTVA4Nfc=";
 
   nativeBuildInputs = [
-    lito
-    cmake
-    ninja
-    pkg-config
-    glslang
-    git
-    autoPatchelfHook
-    autoAddDriverRunpath
-    llvmPackages_22.llvm
-    llvmPackages_22.lld
-    llvmPackages_22.clang-tools
     protobuf
     qt6.qttools
     qt6.wrapQtAppsHook
@@ -67,6 +33,7 @@ llvmPackages_22.stdenv.mkDerivation {
     qt6.qtgrpc
     qt6.qtimageformats
     qt6.qtwebsockets
+    qadwaitadecorations-qt6
     ffmpeg
     libgbm
     libGL
@@ -78,41 +45,17 @@ llvmPackages_22.stdenv.mkDerivation {
     linuxHeaders
   ];
 
-  dontUseCmakeConfigure = true;
-  dontUseNinjaBuild = true;
-  dontUseNinjaInstall = true;
   dontWrapQtApps = true;
-  hardeningDisable = [ "fortify" ];
 
-  # Diagnostic source locations must not retain the build-only dependency bundle.
-  env.NIX_CFLAGS_COMPILE = "-ffile-prefix-map=${litoDeps}=lito-deps";
-  disallowedReferences = [ litoDeps ];
-
-  configurePhase = ''
-    runHook preConfigure
-    export HOME="$TMPDIR/home"
-    mkdir -p "$HOME"
-    for repo in ${litoDeps}/v1/git/*; do
-      git config --global --add safe.directory "$repo"
-    done
+  postConfigure = ''
     # Qt's split Nix outputs keep this find-module outside qtbase's module path.
     mkdir -p "$TMPDIR/cmake/WrapProtoc"
     echo 'include("${qt6.qtgrpc}/lib/cmake/Qt6/FindWrapProtoc.cmake")' \
       > "$TMPDIR/cmake/WrapProtoc/WrapProtocConfig.cmake"
     export CMAKE_PREFIX_PATH="$TMPDIR/cmake''${CMAKE_PREFIX_PATH:+:$CMAKE_PREFIX_PATH}"
-    litoFlags=(--frozen --source-bundle ${litoDeps} --profile release -j "$NIX_BUILD_CORES")
-    runHook postConfigure
   '';
-  buildPhase = ''
-    runHook preBuild
-    lito build "''${litoFlags[@]}"
-    runHook postBuild
-  '';
-  installPhase = ''
-    runHook preInstall
-    lito install "''${litoFlags[@]}" --prefix "$out"
+  postInstall = ''
     ln -s ${waywallen-daemon}/bin/waywallen "$out/bin/waywallen"
-    runHook postInstall
   '';
   postFixup = ''
     wrapQtApp "$out/bin/waywallen-ui"
@@ -120,7 +63,6 @@ llvmPackages_22.stdenv.mkDerivation {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio ]}
   '';
 
-  passthru = { inherit litoDeps; };
   meta = {
     description = "Waywallen daemon, Qt/QML UI and renderer plugins";
     homepage = "https://github.com/waywallen/waywallen";

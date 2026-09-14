@@ -1,5 +1,6 @@
 {
   lib,
+  callPackage,
   llvmPackages_22,
   fetchFromGitHub,
   fetchzip,
@@ -9,6 +10,7 @@
   zstd,
 }:
 let
+  clang-tools = callPackage ./clang-tools.nix { enableLibcxx = true; };
   rstd = fetchFromGitHub {
     owner = "litocpp";
     repo = "rstd";
@@ -49,7 +51,7 @@ llvmPackages_22.libcxxStdenv.mkDerivation {
     pkg-config
     llvmPackages_22.lld
     llvmPackages_22.llvm
-    (llvmPackages_22.clang-tools.override { enableLibcxx = true; })
+    clang-tools
   ];
   buildInputs = [ zstd ];
 

@@ -2,6 +2,7 @@
   llvmPackages_22,
   lito,
   git,
+  git-lfs,
   curl,
   cacert,
   python3,
@@ -21,6 +22,7 @@ llvmPackages_22.stdenv.mkDerivation {
   nativeBuildInputs = [
     lito
     git
+    git-lfs
     curl
     python3
   ];
@@ -35,6 +37,8 @@ llvmPackages_22.stdenv.mkDerivation {
     export HOME="$TMPDIR/home"
     export XDG_DATA_HOME="$HOME/.local/share"
     mkdir -p "$HOME"
+    # QmlMaterial embeds icon fonts stored in Git LFS, not the pointer files.
+    git lfs install --skip-repo
     printf 'retry = 5\nretry-all-errors\n' > "$HOME/.curlrc"
     python3 ${./seed-lito-index.py} lito.lock "$XDG_DATA_HOME/lito"
     lito fetch --locked --output "$out" -j "$NIX_BUILD_CORES" \

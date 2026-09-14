@@ -1,15 +1,7 @@
 {
   lib,
-  llvmPackages_22,
-  lito,
-  fetchLitoDeps,
-  cmake,
-  ninja,
-  pkg-config,
-  glslang,
-  git,
-  autoPatchelfHook,
-  autoAddDriverRunpath,
+  stdenv,
+  buildLitoPackage,
   makeWrapper,
   waywallen-unwrapped,
   ffmpeg,
@@ -45,21 +37,16 @@
   libxcb,
   src,
 }:
-let
+buildLitoPackage {
   pname = "waywallen-open-wallpaper-engine";
   version = "0.2.10";
-  litoDeps = fetchLitoDeps {
-    inherit pname version src;
-    hash =
-      {
-        x86_64-linux = "sha256-36gaOh5V+i3V8d3hHeHEBkDLh0pZwPNiCtnM+JapmPs=";
-        aarch64-linux = "sha256-3LFm0aBeVbBmujGpoxrv9aoSkOjbWMwepOU0YtpJgVE=";
-      }
-      .${llvmPackages_22.stdenv.hostPlatform.system};
-  };
-in
-llvmPackages_22.stdenv.mkDerivation {
-  inherit pname version src;
+  inherit src;
+  litoHash =
+    {
+      x86_64-linux = "sha256-36gaOh5V+i3V8d3hHeHEBkDLh0pZwPNiCtnM+JapmPs=";
+      aarch64-linux = "sha256-3LFm0aBeVbBmujGpoxrv9aoSkOjbWMwepOU0YtpJgVE=";
+    }
+    .${stdenv.hostPlatform.system};
 
   postPatch = ''
     # Match QuickJS's install directory to the config-directory in lito.toml.
@@ -68,20 +55,7 @@ llvmPackages_22.stdenv.mkDerivation {
         'cache = { CMAKE_INSTALL_LIBDIR = "lib", BUILD_SHARED_LIBS = false,'
   '';
 
-  nativeBuildInputs = [
-    lito
-    cmake
-    ninja
-    pkg-config
-    glslang
-    git
-    llvmPackages_22.llvm
-    llvmPackages_22.lld
-    llvmPackages_22.clang-tools
-    autoPatchelfHook
-    autoAddDriverRunpath
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
     waywallen-unwrapped
     ffmpeg
@@ -118,41 +92,14 @@ llvmPackages_22.stdenv.mkDerivation {
     libxcb
   ];
 
-  dontUseCmakeConfigure = true;
-  dontUseNinjaBuild = true;
-  dontUseNinjaInstall = true;
-  hardeningDisable = [ "fortify" ];
   # CEF uses -Werror, while Nix's Clang wrapper supplies the standard library itself.
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-Wno-unused-command-line-argument"
-    "-ffile-prefix-map=${litoDeps}=lito-deps"
-  ];
-  disallowedReferences = [ litoDeps ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-unused-command-line-argument";
+  litoFlags = "-p owe-waywallen-plugin";
 
-  configurePhase = ''
-    runHook preConfigure
-    export HOME="$TMPDIR/home"
-    mkdir -p "$HOME"
-    for repo in ${litoDeps}/v1/git/*; do
-      git config --global --add safe.directory "$repo"
-    done
-    litoFlags=(--frozen --source-bundle ${litoDeps} --profile release -j "$NIX_BUILD_CORES")
-    runHook postConfigure
-  '';
-  buildPhase = ''
-    runHook preBuild
-    lito build "''${litoFlags[@]}" \
-      -p owe-waywallen-scene-renderer -p owe-waywallen-web-renderer
-    runHook postBuild
-  '';
-  installPhase = ''
-    runHook preInstall
-    lito install "''${litoFlags[@]}" -p owe-waywallen-plugin --prefix "$out"
-
+  postInstall = ''
     # Use the host Vulkan loader and drivers, retaining CEF's ANGLE libraries.
     rm -f "$out/lib/weweb/"{libvulkan.so.1,libvk_swiftshader.so,vk_swiftshader_icd.json}
     ln -s ${vulkan-loader}/lib/libvulkan.so.1 "$out/lib/weweb/libvulkan.so.1"
-    runHook postInstall
   '';
   postFixup = ''
     wrapProgram "$out/bin/waywallen-wescene-renderer" \
@@ -166,7 +113,6 @@ llvmPackages_22.stdenv.mkDerivation {
       }
   '';
 
-  passthru = { inherit litoDeps; };
   meta = {
     description = "Wallpaper Engine scene and web renderers for Waywallen";
     homepage = "https://github.com/waywallen/open-wallpaper-engine";

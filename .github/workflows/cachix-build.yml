@@ -22,3 +22,4 @@ jobs:
           .#waywallen-layer-shell \
           .#waywallen-kde \
           .#waywallen-gnome
+    - run: nix flake check

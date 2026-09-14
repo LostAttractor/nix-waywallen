@@ -7,13 +7,14 @@
 let
   lito = pkgs.callPackage ./lito.nix { };
   fetchLitoDeps = pkgs.callPackage ./fetch-lito-deps.nix { inherit lito; };
+  buildLitoPackage = pkgs.callPackage ./build-lito-package.nix { inherit lito fetchLitoDeps; };
   waywallen-daemon = pkgs.callPackage ./waywallen-daemon.nix { src = waywallen-src; };
   waywallen-unwrapped = pkgs.callPackage ./waywallen.nix {
-    inherit lito fetchLitoDeps waywallen-daemon;
+    inherit buildLitoPackage waywallen-daemon;
     src = waywallen-src;
   };
   waywallen-open-wallpaper-engine = pkgs.callPackage ./open-wallpaper-engine.nix {
-    inherit lito fetchLitoDeps waywallen-unwrapped;
+    inherit buildLitoPackage waywallen-unwrapped;
     src = open-wallpaper-engine-src;
   };
 in

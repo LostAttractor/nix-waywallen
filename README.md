@@ -23,9 +23,13 @@ nix build .#waywallen-open-wallpaper-engine
 
 Both `x86_64-linux` and `aarch64-linux` are supported. Upstream release tags are pinned in `flake.lock`. Lito is bootstrapped from pinned sources with Clang 22, and its dependencies are fetched into fixed-output source bundles using upstream `lito.lock` files. Compilation then runs offline with `--frozen` inside the Nix sandbox. The Rust daemon uses the existing Cargo-based Nix package.
 
+The two Lito-based packages share `pkgs/build-lito-package.nix`: `buildPhase` runs `lito install` once to build and stage the installable artifacts, and `installPhase` only copies the staged tree to `$out`. This avoids compiling twice and handles Lito's install-specific link variants without an extra build.
+
 The open-wallpaper-engine renderers are compiled from source. Their web rendering dependency, **CEF**, uses the architecture-specific binary SDK and checksum pinned by upstream; Chromium itself is not compiled by this flake. Qt, FFmpeg and other system libraries come from Nixpkgs.
 
 When updating an upstream tag, also update the package version and the corresponding Lito dependency bundle hashes (for both architectures), alongside `cargoHash` if the daemon's Cargo dependencies changed.
+
+Run `nix flake check` to build and test the current system. The runtime check starts the packaged daemon in an isolated D-Bus session, verifies plugin translations and Lua sources, scans generated image/video fixtures and checks their dimensions, and checks Qt image decoding, embedded Material icon fonts, Adwaita window decorations and tray resources. Source-built outputs also reject references to the build-only Lito dependency bundles.
 
 ## Installation
 
