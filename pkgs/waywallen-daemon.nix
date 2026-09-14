@@ -4,6 +4,7 @@
   pkg-config,
   protobuf,
   sqlite,
+  ffmpeg,
   vulkan-loader,
   libpulseaudio,
   makeWrapper,
@@ -32,8 +33,17 @@ rustPlatform.buildRustPackage {
   doCheck = false;
 
   postInstall = ''
+    # The tray publishes an icon directory relative to the actual daemon executable.
+    install -Dm644 ui/assets/waywallen-ui.svg \
+      "$out/share/icons/hicolor/scalable/apps/org.waywallen.waywallen.svg"
+
     wrapProgram $out/bin/waywallen \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio ]}
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          ffmpeg
+          libpulseaudio
+        ]
+      }
     wrapProgram $out/bin/waywallen_renderer \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
