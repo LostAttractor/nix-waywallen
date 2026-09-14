@@ -6,12 +6,26 @@ This repository contains a Nix Flake that packages [Waywallen](https://github.co
 
 This flake exports the following packages:
 
-- **`waywallen`**: The unified package containing the Waywallen daemon, UI, renderer plugins (image, video), and the open wallpaper engine plugin. This is the primary package you should install. It is packaged from the official architecture-specific release artifacts.
+- **`waywallen`**: The unified, source-built package containing the Waywallen daemon, Qt/QML UI, built-in plugins (image, video, Wallhaven), and the open-wallpaper-engine plugin. This is the primary package you should install.
+- **`waywallen-open-wallpaper-engine`**: The source-built Wallpaper Engine scene and web renderer plugin, also included in `waywallen`.
 - **`waywallen-layer-shell`**: The Wayland layer-shell display backend.
 - **`waywallen-kde`**: KDE Plasma plugin for the Waywallen display.
 - **`waywallen-gnome`**: GNOME Shell extension for the Waywallen display.
 
-`waywallen-daemon` remains available as a standalone source-built package. The `waywallen-ui`, `waywallen-plugins`, and `waywallen-open-wallpaper-engine` attributes are compatibility aliases for the unified official release because upstream now builds and ships these components together with Lito.
+`waywallen-daemon` is also available as a standalone source-built package. The `waywallen-ui` and `waywallen-plugins` attributes are compatibility aliases for the unified package.
+
+## Building
+
+```sh
+nix build .#waywallen
+nix build .#waywallen-open-wallpaper-engine
+```
+
+Both `x86_64-linux` and `aarch64-linux` are supported. Upstream release tags are pinned in `flake.lock`. Lito is bootstrapped from pinned sources with Clang 22, and its dependencies are fetched into fixed-output source bundles using upstream `lito.lock` files. Compilation then runs offline with `--frozen` inside the Nix sandbox. The Rust daemon uses the existing Cargo-based Nix package.
+
+The open-wallpaper-engine renderers are compiled from source. Their web rendering dependency, **CEF**, uses the architecture-specific binary SDK and checksum pinned by upstream; Chromium itself is not compiled by this flake. Qt, FFmpeg and other system libraries come from Nixpkgs.
+
+When updating an upstream tag, also update the package version and the corresponding Lito dependency bundle hashes (for both architectures), alongside `cargoHash` if the daemon's Cargo dependencies changed.
 
 ## Installation
 

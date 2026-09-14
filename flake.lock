@@ -16,9 +16,27 @@
         "type": "github"
       }
     },
+    "open-wallpaper-engine-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1789211549,
+        "narHash": "sha256-o/5YdK3rh/DOukXV+Vx66fsebUy2nGk9k7pYSvgSx0k=",
+        "owner": "waywallen",
+        "repo": "open-wallpaper-engine",
+        "rev": "13065a71b7c0b59408acb7fab1fc7f1bca37eb88",
+        "type": "github"
+      },
+      "original": {
+        "owner": "waywallen",
+        "ref": "v0.2.10",
+        "repo": "open-wallpaper-engine",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "nixpkgs": "nixpkgs",
+        "open-wallpaper-engine-src": "open-wallpaper-engine-src",
         "waywallen-display-src": "waywallen-display-src",
         "waywallen-src": "waywallen-src"
       }

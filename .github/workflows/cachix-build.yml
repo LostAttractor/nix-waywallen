@@ -17,6 +17,7 @@ jobs:
     - run: |
         nix build \
           .#waywallen \
+          .#waywallen-open-wallpaper-engine \
           .#waywallen-daemon \
           .#waywallen-layer-shell \
           .#waywallen-kde \

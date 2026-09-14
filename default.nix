@@ -26,15 +26,20 @@ let
 
   waywallen-src = fetchInput "waywallen-src";
   waywallen-display-src = fetchInput "waywallen-display-src";
+  open-wallpaper-engine-src = fetchInput "open-wallpaper-engine-src";
 
   packages = import ./pkgs {
-    inherit pkgs waywallen-src waywallen-display-src;
+    inherit
+      pkgs
+      waywallen-src
+      waywallen-display-src
+      open-wallpaper-engine-src
+      ;
   };
 in
 packages
 // {
-  # Compatibility aliases: the official release now ships these together.
+  # Compatibility aliases for the unified package.
   waywallen-ui = packages.waywallen;
   waywallen-plugins = packages.waywallen;
-  waywallen-open-wallpaper-engine = packages.waywallen;
 }

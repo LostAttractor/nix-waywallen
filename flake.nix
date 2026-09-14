@@ -14,6 +14,10 @@
       url = "github:waywallen/waywallen-display/v0.3.3";
       flake = false;
     };
+    open-wallpaper-engine-src = {
+      url = "github:waywallen/open-wallpaper-engine/v0.2.10";
+      flake = false;
+    };
   };
 
   outputs =
@@ -21,6 +25,7 @@
       nixpkgs,
       waywallen-src,
       waywallen-display-src,
+      open-wallpaper-engine-src,
       ...
     }:
     let
@@ -32,7 +37,12 @@
       mkPackages =
         pkgs:
         import ./pkgs {
-          inherit pkgs waywallen-src waywallen-display-src;
+          inherit
+            pkgs
+            waywallen-src
+            waywallen-display-src
+            open-wallpaper-engine-src
+            ;
         };
     in
     {
@@ -43,10 +53,9 @@
         in
         packages
         // {
-          # Compatibility aliases: the official release now ships these together.
+          # Compatibility aliases for the unified package.
           waywallen-ui = packages.waywallen;
           waywallen-plugins = packages.waywallen;
-          waywallen-open-wallpaper-engine = packages.waywallen;
 
           default = packages.waywallen;
         }
@@ -58,7 +67,6 @@
         // {
           waywallen-ui = final.waywallen;
           waywallen-plugins = final.waywallen;
-          waywallen-open-wallpaper-engine = final.waywallen;
         };
     };
 }

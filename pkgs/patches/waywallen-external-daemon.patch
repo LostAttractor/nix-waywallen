@@ -1,0 +1,24 @@
+diff --git a/ui/lito.toml b/ui/lito.toml
+--- a/ui/lito.toml
++++ b/ui/lito.toml
+@@ -158,3 +157,0 @@
+-[external-dependencies.cargo.waywallen-daemon]
+-workspace = true
+-usage = "runtime"
+diff --git a/ui/install.lua b/ui/install.lua
+--- a/ui/install.lua
++++ b/ui/install.lua
+@@ -7,13 +7,6 @@ lito.install({
+       destination = "bin/waywallen-ui",
+     },
+   },
+-  external_assets = {
+-    {
+-      dependency = "waywallen-daemon",
+-      set = "waywallen",
+-      destination = "bin",
+-    },
+-  },
+   files = {
+     {
+       source = "assets/waywallen-ui.svg",
