@@ -13,11 +13,12 @@
   src,
   hash,
   patches ? [ ],
+  postPatch ? "",
   arch ? llvmPackages_22.stdenv.hostPlatform.parsed.cpu.name,
 }:
 llvmPackages_22.stdenv.mkDerivation {
   name = "${pname}-${version}-lito-deps-${arch}";
-  inherit src patches;
+  inherit src patches postPatch;
 
   nativeBuildInputs = [
     lito

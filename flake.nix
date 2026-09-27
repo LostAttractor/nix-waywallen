@@ -7,15 +7,15 @@
     # Upstream sources — pinned to latest release tags.
     # Bump the tag refs when packaging a new upstream release.
     waywallen-src = {
-      url = "github:waywallen/waywallen/v0.3.9";
+      url = "github:waywallen/waywallen/v0.4.3";
       flake = false;
     };
     waywallen-display-src = {
-      url = "github:waywallen/waywallen-display/v0.3.3";
+      url = "github:waywallen/waywallen-display/v0.4.0";
       flake = false;
     };
     open-wallpaper-engine-src = {
-      url = "github:waywallen/open-wallpaper-engine/v0.2.10";
+      url = "github:waywallen/open-wallpaper-engine/v0.3.0";
       flake = false;
     };
   };

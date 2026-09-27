@@ -1,4 +1,4 @@
-"""Seed the locked registry records required by Lito 0.8.1's bundle exporter.
+"""Seed the locked registry records required by Lito's bundle exporter.
 
 Locked resolution skips the registry index, but `lito fetch --output` still
 expects cached records. Keep only locked releases so new registry publications

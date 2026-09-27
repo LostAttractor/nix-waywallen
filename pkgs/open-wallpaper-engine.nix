@@ -39,12 +39,12 @@
 }:
 buildLitoPackage {
   pname = "waywallen-open-wallpaper-engine";
-  version = "0.2.10";
+  version = "0.3.0";
   inherit src;
   litoHash =
     {
-      x86_64-linux = "sha256-36gaOh5V+i3V8d3hHeHEBkDLh0pZwPNiCtnM+JapmPs=";
-      aarch64-linux = "sha256-3LFm0aBeVbBmujGpoxrv9aoSkOjbWMwepOU0YtpJgVE=";
+      x86_64-linux = "sha256-xrNQ5AkKO1m3FVQJc4+m9MQ17QU29MPTwpp63NhUUAM=";
+      aarch64-linux = "sha256-842L9q1Ie93JWiqBvJk3pTIAYRbz/TsueykQryHkapg=";
     }
     .${stdenv.hostPlatform.system};
 
@@ -53,6 +53,9 @@ buildLitoPackage {
     substituteInPlace lito.toml \
       --replace-fail 'cache = { BUILD_SHARED_LIBS = false,' \
         'cache = { CMAKE_INSTALL_LIBDIR = "lib", BUILD_SHARED_LIBS = false,'
+    # Lito 0.8.4 excludes development-only edges of registry dependencies.
+    substituteInPlace lito.lock \
+      --replace-fail $'  "rstd-std",\n  "rstd-test",\n]' $'  "rstd-std",\n]'
   '';
 
   nativeBuildInputs = [ makeWrapper ];

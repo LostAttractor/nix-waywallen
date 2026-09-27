@@ -13,19 +13,9 @@
 }:
 stdenv.mkDerivation {
   pname = "waywallen-display-gnome";
-  version = "0.3.3";
+  version = "0.4.0";
 
   inherit src;
-
-  patches = [
-    # GJS (the GNOME JavaScript engine) represents uint64 values as JavaScript
-    # Numbers, which only have 53 bits of mantissa. DRM buffer modifiers are 64-bit
-    # values and commonly use the upper bits (e.g. AFBC, DCC modifier flags), so
-    # passing them through GJS causes silent precision loss. This patch replaces the
-    # JS call path with a new C function ww_shadow_paintable_set_shadow_from_display()
-    # that reads the modifier directly in C and never exposes it to JS.
-    ./patches/gnome-gjs-bigint.patch
-  ];
 
   nativeBuildInputs = [
     cmake

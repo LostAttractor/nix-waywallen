@@ -24,6 +24,7 @@ llvmPackages_22.stdenv.mkDerivation (
     litoDeps = fetchLitoDeps {
       inherit (finalAttrs) pname version src;
       patches = finalAttrs.patches or [ ];
+      postPatch = finalAttrs.postPatch or "";
       hash = litoHash;
     };
   in

@@ -14,14 +14,14 @@ let
   rstd = fetchFromGitHub {
     owner = "litocpp";
     repo = "rstd";
-    rev = "7b45034d8e833398da6bff834b652a1dc40a6a4f";
-    hash = "sha256-KIAITRp98if9So19sGqP39bGgep9NafETMZUBAc9qNk=";
+    rev = "4a4bf6910cd06043b80b179eff35f229a82580b8";
+    hash = "sha256-hwET+YV0qxGPK9ONnk+f6T197SG11igGAdBN37+j1LE=";
   };
   luato = fetchFromGitHub {
     owner = "litocpp";
     repo = "luato";
-    rev = "9ad07ca2604022319c0178b7f5543220baf87050";
-    hash = "sha256-C1DlycFz5z+e+A5FsL18ePc4KQYscn2z4cJKPBgkj8w=";
+    rev = "df0c6f2d1cce2051b4711d36067619eda7933683";
+    hash = "sha256-XL1evcZbZJ2LfTi5T9UQ+4YBEw5YnDsGeY3IBS+Fs5U=";
   };
   licrypto = fetchFromGitHub {
     owner = "litocpp";
@@ -36,13 +36,13 @@ let
 in
 llvmPackages_22.libcxxStdenv.mkDerivation {
   pname = "lito";
-  version = "0.8.1";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "litocpp";
     repo = "lito";
-    rev = "3d2c7a4d9ac6de49e1536897479d4c474e813c0c";
-    hash = "sha256-OA/CQNxUpVo1AObedG+F4LHTRRiK/1xv9F7daRmGMg4=";
+    rev = "58f7b09a11ba6b6b549083f633e18c8990804339";
+    hash = "sha256-SKjS3ViWk3ZWAunrYByF/QYgHru9b/iF5j1obriG1TQ=";
   };
 
   nativeBuildInputs = [
