@@ -53,9 +53,6 @@ buildLitoPackage {
     substituteInPlace lito.toml \
       --replace-fail 'cache = { BUILD_SHARED_LIBS = false,' \
         'cache = { CMAKE_INSTALL_LIBDIR = "lib", BUILD_SHARED_LIBS = false,'
-    # Lito 0.8.4 excludes development-only edges of registry dependencies.
-    substituteInPlace lito.lock \
-      --replace-fail $'  "rstd-std",\n  "rstd-test",\n]' $'  "rstd-std",\n]'
   '';
 
   nativeBuildInputs = [ makeWrapper ];

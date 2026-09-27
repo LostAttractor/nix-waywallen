@@ -19,17 +19,17 @@
     "open-wallpaper-engine-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1790332101,
-        "narHash": "sha256-YQzPqrjdqs4FcHqDBA5mydAewByljGrAQeFXE+ERw5k=",
+        "lastModified": 1790332911,
+        "narHash": "sha256-hW6ezg3Fu8zMASbvbfycA7B21U49ipU1TrAcqLttnmw=",
         "owner": "waywallen",
         "repo": "open-wallpaper-engine",
-        "rev": "e71152cbabc9b38224a47a885c75edc4cada91f4",
+        "rev": "3f2e4ee27ee52e61434c1ac0f42affced8cf815c",
         "type": "github"
       },
       "original": {
         "owner": "waywallen",
-        "ref": "v0.3.0",
         "repo": "open-wallpaper-engine",
+        "rev": "3f2e4ee27ee52e61434c1ac0f42affced8cf815c",
         "type": "github"
       }
     },

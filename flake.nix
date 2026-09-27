@@ -4,8 +4,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    # Upstream sources — pinned to latest release tags.
-    # Bump the tag refs when packaging a new upstream release.
+    # Upstream sources — pinned to releases or known fixes.
     waywallen-src = {
       url = "github:waywallen/waywallen/v0.4.3";
       flake = false;
@@ -14,8 +13,9 @@
       url = "github:waywallen/waywallen-display/v0.4.0";
       flake = false;
     };
+    # v0.3.0 with the upstream Lito 0.8.4 lock-file fix.
     open-wallpaper-engine-src = {
-      url = "github:waywallen/open-wallpaper-engine/v0.3.0";
+      url = "github:waywallen/open-wallpaper-engine/3f2e4ee27ee52e61434c1ac0f42affced8cf815c";
       flake = false;
     };
   };
