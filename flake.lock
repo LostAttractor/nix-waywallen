@@ -44,16 +44,16 @@
     "waywallen-display-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1790013793,
-        "narHash": "sha256-qFCKUQSfx+bjbbfkj/REIf4w4U09sPCcilHI0lE6YqQ=",
+        "lastModified": 1791942482,
+        "narHash": "sha256-VScmByqw5Ue5Md3KEAjJLGFHlNxyS8GFbgiMdi+Y31k=",
         "owner": "waywallen",
         "repo": "waywallen-display",
-        "rev": "4fc25d632125967de0be34d095206ca9420432e8",
+        "rev": "a4444964a097591bcffbf52ad0d890a383653d2d",
         "type": "github"
       },
       "original": {
         "owner": "waywallen",
-        "ref": "v0.4.0",
+        "ref": "v0.4.2",
         "repo": "waywallen-display",
         "type": "github"
       }
@@ -61,16 +61,16 @@
     "waywallen-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1790434686,
-        "narHash": "sha256-nGTfRAUu9aPUPz/UfnMf8QJnO689/Xstl17yvWiKk1U=",
+        "lastModified": 1791282784,
+        "narHash": "sha256-/ML7KKSes00fT/2fpRcAu0TjTSuSD2lMmXcOmOu4vpI=",
         "owner": "waywallen",
         "repo": "waywallen",
-        "rev": "2bdf9af327eed42897b4a3f451db54d7996bbd57",
+        "rev": "f42cb1a6b12301dfd1b46e1ef1cfbce6140bc5d3",
         "type": "github"
       },
       "original": {
         "owner": "waywallen",
-        "ref": "v0.4.3",
+        "ref": "v0.4.4",
         "repo": "waywallen",
         "type": "github"
       }

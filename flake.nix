@@ -6,11 +6,11 @@
 
     # Upstream sources — pinned to releases or known fixes.
     waywallen-src = {
-      url = "github:waywallen/waywallen/v0.4.3";
+      url = "github:waywallen/waywallen/v0.4.4";
       flake = false;
     };
     waywallen-display-src = {
-      url = "github:waywallen/waywallen-display/v0.4.0";
+      url = "github:waywallen/waywallen-display/v0.4.2";
       flake = false;
     };
     # v0.3.0 with the upstream Lito 0.8.4 lock-file fix.

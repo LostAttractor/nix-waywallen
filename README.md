@@ -14,6 +14,8 @@ This flake exports the following packages:
 
 `waywallen-daemon` is also available as a standalone source-built package. The `waywallen-ui` and `waywallen-plugins` attributes are compatibility aliases for the unified package.
 
+The current package versions are Waywallen **0.4.4**, Waywallen Display **0.4.2**, and open-wallpaper-engine **0.3.0**. The engine retains upstream commit `3f2e4ee`, which fixes the 0.3.0 release lock file for Lito 0.8.4 without changing renderer code.
+
 ## Building
 
 ```sh
@@ -21,7 +23,7 @@ nix build .#waywallen
 nix build .#waywallen-open-wallpaper-engine
 ```
 
-Both `x86_64-linux` and `aarch64-linux` are supported. Upstream release tags are pinned in `flake.lock`. Lito is bootstrapped from pinned sources with Clang 22, and its dependencies are fetched into fixed-output source bundles using upstream `lito.lock` files. Compilation then runs offline with `--frozen` inside the Nix sandbox. The Rust daemon uses the existing Cargo-based Nix package.
+Both `x86_64-linux` and `aarch64-linux` are supported. Upstream release tags are pinned in `flake.lock`. Lito 0.8.6 is bootstrapped from pinned sources with Clang 22, and its dependencies are fetched into fixed-output source bundles using upstream `lito.lock` files. Compilation then runs offline with `--frozen` inside the Nix sandbox. The Rust daemon uses the existing Cargo-based Nix package.
 
 The two Lito-based packages share `pkgs/build-lito-package.nix`: `buildPhase` runs `lito install` once to build and stage the installable artifacts, and `installPhase` only copies the staged tree to `$out`. This avoids compiling twice and handles Lito's install-specific link variants without an extra build.
 
