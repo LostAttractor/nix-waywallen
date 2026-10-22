@@ -39,21 +39,14 @@
 }:
 buildLitoPackage {
   pname = "waywallen-open-wallpaper-engine";
-  version = "0.3.0";
+  version = "0.3.1";
   inherit src;
   litoHash =
     {
-      x86_64-linux = "sha256-xrNQ5AkKO1m3FVQJc4+m9MQ17QU29MPTwpp63NhUUAM=";
-      aarch64-linux = "sha256-842L9q1Ie93JWiqBvJk3pTIAYRbz/TsueykQryHkapg=";
+      x86_64-linux = "sha256-DIXzmk48FXzQTVEpK6td70TybDBAChIGS3xsFgWl/j4=";
+      aarch64-linux = "sha256-5F49+QME/e2GzT6hATEfKCYkqnzU9z8D+xwSRfDVnh8=";
     }
     .${stdenv.hostPlatform.system};
-
-  postPatch = ''
-    # Match QuickJS's install directory to the config-directory in lito.toml.
-    substituteInPlace lito.toml \
-      --replace-fail 'cache = { BUILD_SHARED_LIBS = false,' \
-        'cache = { CMAKE_INSTALL_LIBDIR = "lib", BUILD_SHARED_LIBS = false,'
-  '';
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [

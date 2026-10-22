@@ -14,7 +14,7 @@ This flake exports the following packages:
 
 `waywallen-daemon` is also available as a standalone source-built package. The `waywallen-ui` and `waywallen-plugins` attributes are compatibility aliases for the unified package.
 
-The current package versions are Waywallen **0.4.4**, Waywallen Display **0.4.2**, and open-wallpaper-engine **0.3.0**. The engine retains upstream commit `3f2e4ee`, which fixes the 0.3.0 release lock file for Lito 0.8.4 without changing renderer code.
+The current package versions are Waywallen **0.5.0**, Waywallen Display **0.4.3**, and open-wallpaper-engine **0.3.1**.
 
 ## Building
 

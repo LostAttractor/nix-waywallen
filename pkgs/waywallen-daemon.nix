@@ -4,6 +4,7 @@
   pkg-config,
   protobuf,
   sqlite,
+  openssl,
   ffmpeg,
   vulkan-loader,
   libpulseaudio,
@@ -13,11 +14,11 @@
 
 rustPlatform.buildRustPackage {
   pname = "waywallen-daemon";
-  version = "0.4.4";
+  version = "0.5.0";
 
   inherit src;
 
-  cargoHash = "sha256-eQ/dM8j7TgpkiKTYaD/PPxdlokWTMYSrwXJ6rsZ4mCI=";
+  cargoHash = "sha256-YsZ+gK8rkOxjgasDU7jEP6TD/kMhPYX4dW+Ws0PlylU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -27,6 +28,7 @@ rustPlatform.buildRustPackage {
 
   buildInputs = [
     sqlite
+    openssl
     libpulseaudio
   ];
 

@@ -17,10 +17,10 @@
 }:
 buildLitoPackage {
   pname = "waywallen";
-  version = "0.4.4";
+  version = "0.5.0";
   inherit src;
   patches = [ ./patches/waywallen-external-daemon.patch ];
-  litoHash = "sha256-3KTroG5FZk3CR33xLB1bCU80UoC+EmbCWojQNoqJKso=";
+  litoHash = "sha256-MnZSGgVk5731hgv32kVbtx8rRCW6dUWwfJhJO/r38E4=";
 
   nativeBuildInputs = [
     protobuf
