@@ -39,12 +39,12 @@
 }:
 buildLitoPackage {
   pname = "waywallen-open-wallpaper-engine";
-  version = "0.3.1";
+  version = "0.3.3";
   inherit src;
   litoHash =
     {
-      x86_64-linux = "sha256-DIXzmk48FXzQTVEpK6td70TybDBAChIGS3xsFgWl/j4=";
-      aarch64-linux = "sha256-5F49+QME/e2GzT6hATEfKCYkqnzU9z8D+xwSRfDVnh8=";
+      x86_64-linux = "sha256-H48DmbBY8s9ysHVPOIbUuednvq7ANr4jKwOjYpomtFI=";
+      aarch64-linux = "sha256-Ag8xnXWw4e3tbKb8WotELB8RE9+HcJk+MSx2+3z8XNQ=";
     }
     .${stdenv.hostPlatform.system};
 

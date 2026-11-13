@@ -14,11 +14,11 @@
 
 rustPlatform.buildRustPackage {
   pname = "waywallen-daemon";
-  version = "0.5.0";
+  version = "0.6.0";
 
   inherit src;
 
-  cargoHash = "sha256-YsZ+gK8rkOxjgasDU7jEP6TD/kMhPYX4dW+Ws0PlylU=";
+  cargoHash = "sha256-F16RfCJAt8g2N8DsiP1ei93OgQ6Xn0LAjQ8iNFLHZP4=";
 
   nativeBuildInputs = [
     pkg-config

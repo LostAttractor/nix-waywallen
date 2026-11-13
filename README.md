@@ -6,7 +6,7 @@ This repository contains a Nix Flake that packages [Waywallen](https://github.co
 
 This flake exports the following packages:
 
-- **`waywallen`**: The unified, source-built package containing the Waywallen daemon, Qt/QML UI, built-in plugins (image, video, Wallhaven), and the open-wallpaper-engine plugin. This is the primary package you should install.
+- **`waywallen`**: The unified, source-built package containing the Waywallen daemon, Qt/QML UI, built-in plugins (image, video, glTF, Sketchfab, Wallhaven), and the open-wallpaper-engine plugin. This is the primary package you should install.
 - **`waywallen-open-wallpaper-engine`**: The source-built Wallpaper Engine scene and web renderer plugin, also included in `waywallen`.
 - **`waywallen-layer-shell`**: The Wayland layer-shell display backend.
 - **`waywallen-kde`**: KDE Plasma plugin for the Waywallen display.
@@ -14,7 +14,7 @@ This flake exports the following packages:
 
 `waywallen-daemon` is also available as a standalone source-built package. The `waywallen-ui` and `waywallen-plugins` attributes are compatibility aliases for the unified package.
 
-The current package versions are Waywallen **0.5.0**, Waywallen Display **0.4.3**, and open-wallpaper-engine **0.3.1**.
+The current package versions are Waywallen **0.6.0**, Waywallen Display **0.4.6**, and open-wallpaper-engine **0.3.3**.
 
 ## Building
 

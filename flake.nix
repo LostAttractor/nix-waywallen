@@ -6,15 +6,15 @@
 
     # Upstream sources — pinned to releases or known fixes.
     waywallen-src = {
-      url = "github:waywallen/waywallen/v0.5.0";
+      url = "github:waywallen/waywallen/v0.6.0";
       flake = false;
     };
     waywallen-display-src = {
-      url = "github:waywallen/waywallen-display/v0.4.3";
+      url = "github:waywallen/waywallen-display/v0.4.6";
       flake = false;
     };
     open-wallpaper-engine-src = {
-      url = "github:waywallen/open-wallpaper-engine/v0.3.1";
+      url = "github:waywallen/open-wallpaper-engine/v0.3.3";
       flake = false;
     };
   };

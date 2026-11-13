@@ -1,24 +1,27 @@
 diff --git a/ui/lito.toml b/ui/lito.toml
 --- a/ui/lito.toml
 +++ b/ui/lito.toml
-@@ -158,3 +157,0 @@
+@@ -165,6 +165,3 @@
+   { name = "qml_material::waywallen" },
+ ]
+ 
 -[external-dependencies.cargo.waywallen-daemon]
 -workspace = true
 -usage = "runtime"
 diff --git a/ui/install.lua b/ui/install.lua
 --- a/ui/install.lua
 +++ b/ui/install.lua
-@@ -7,13 +7,6 @@ lito.install({
+@@ -5,13 +5,6 @@
+     {
+       target = { kind = "bin", name = "waywallen-ui" },
        destination = "bin/waywallen-ui",
-     },
-   },
+-    },
+-  },
 -  external_assets = {
 -    {
 -      dependency = "waywallen-daemon",
 -      set = "waywallen",
 -      destination = "bin",
--    },
--  },
-   files = {
-     {
-       source = "assets/waywallen-ui.svg",
+     },
+   },
+   generated_files = {

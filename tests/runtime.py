@@ -18,12 +18,15 @@ import control_pb2 as pb
 EXPECTED_PLUGINS = {
     "org.waywallen.image",
     "org.waywallen.video",
+    "org.waywallen.gltf",
+    "org.waywallen.sketchfab",
     "org.waywallen.wallhaven",
     "org.waywallen.open-wallpaper-engine",
 }
 EXPECTED_RENDERERS = {
     "waywallen-image",
     "waywallen-video",
+    "waywallen-gltf",
     "wescene-renderer",
     "weweb-renderer",
 }
@@ -40,6 +43,7 @@ def wait_for(description, check):
 
 
 def check_daemon(package, home, images, video, env):
+    assert os.access(package / "bin/waywallen-probe", os.X_OK), "Missing probe worker"
     log_path = home / "daemon.log"
     with log_path.open("w") as log:
         daemon = subprocess.Popen(
@@ -72,18 +76,18 @@ def check_daemon(package, home, images, video, env):
                 assert {plugin.id for plugin in plugins.plugins} == EXPECTED_PLUGINS, plugins
                 assert not plugins.inactive_system, plugins
 
-                # Wallhaven is discover-only; the other three plugins expose local sources.
+                # Wallhaven and Sketchfab are discover-only; the other plugins expose local sources.
                 # Querying both views proves that the Lua imports succeeded.
                 wait_for(
                     "all Lua sources",
                     lambda: {
                         source.plugin_id
                         for source in request("source_list", pb.SourceListRequest()).sources
-                    } == EXPECTED_PLUGINS - {"org.waywallen.wallhaven"},
+                    } == EXPECTED_PLUGINS - {"org.waywallen.wallhaven", "org.waywallen.sketchfab"},
                 )
                 remote = request("remote_availability", pb.RemoteAvailabilityRequest())
                 assert {source.owner_plugin_id for source in remote.sources} == {
-                    "org.waywallen.wallhaven", "org.waywallen.open-wallpaper-engine",
+                    "org.waywallen.wallhaven", "org.waywallen.sketchfab", "org.waywallen.open-wallpaper-engine",
                 }, remote
                 translations = request("plugin_translation_list", pb.PluginTranslationListRequest())
                 assert {doc.plugin_id for doc in translations.documents if doc.po} == EXPECTED_PLUGINS
@@ -92,7 +96,7 @@ def check_daemon(package, home, images, video, env):
                 for renderer in renderers.renderers:
                     assert os.access(renderer.bin, os.X_OK), renderer.bin
 
-                # Adding real libraries triggers scanning and the daemon's dlopen-based probe.
+                # Adding real libraries triggers scanning and the packaged probe worker.
                 # Check each scan before adding another library to avoid coalescing scan tasks.
                 for kind, directory, dimensions in (
                     ("image", images, {"sample.png": (17, 13), "sample.webp": (17, 13), "sample.tiff": (17, 13)}),

@@ -19,16 +19,16 @@
     "open-wallpaper-engine-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1792517327,
-        "narHash": "sha256-GvG65xFT3Dd+dfVkY/BzJfsCmgUgfaYYexug8y+JYCw=",
+        "lastModified": 1794150615,
+        "narHash": "sha256-h1MNGxldaFY9wyBuihQe/dlaYAHmygIHu9EXT3eLhXs=",
         "owner": "waywallen",
         "repo": "open-wallpaper-engine",
-        "rev": "5cd2129608dd96bcba90e74c8647f094b2efdf1b",
+        "rev": "f119c26860fa4607565994fb29c864eb0ee7cd15",
         "type": "github"
       },
       "original": {
         "owner": "waywallen",
-        "ref": "v0.3.1",
+        "ref": "v0.3.3",
         "repo": "open-wallpaper-engine",
         "type": "github"
       }
@@ -44,16 +44,16 @@
     "waywallen-display-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1792516116,
-        "narHash": "sha256-pYc7n+FB3Y3BHP+bkExhqZWXZPUEXbNcTYFQIj+rBS4=",
+        "lastModified": 1794236239,
+        "narHash": "sha256-N0V/+g81hKJQGN17a9FJAAEeoIP8nZLoLL0655eQyBI=",
         "owner": "waywallen",
         "repo": "waywallen-display",
-        "rev": "f8119f0483cc30baca20ec9b697070cb9a1724e6",
+        "rev": "48946b4965c9f746c7d56bb72b66e5ff01c2d6e9",
         "type": "github"
       },
       "original": {
         "owner": "waywallen",
-        "ref": "v0.4.3",
+        "ref": "v0.4.6",
         "repo": "waywallen-display",
         "type": "github"
       }
@@ -61,16 +61,16 @@
     "waywallen-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1792517518,
-        "narHash": "sha256-z1OnbtT/1TZOBtrz3srCj7SPWaQphUQBXIDYw745XEE=",
+        "lastModified": 1794150010,
+        "narHash": "sha256-XA8i8ZX1qBJPm3KM4uzz9mi9jrlVy9IxJpGxon26IaI=",
         "owner": "waywallen",
         "repo": "waywallen",
-        "rev": "564eb02e25bab1908dce6ae811c15984a8039e7f",
+        "rev": "454e38ff3edc0dbc076fa4a57ee8e2e6e9c08a60",
         "type": "github"
       },
       "original": {
         "owner": "waywallen",
-        "ref": "v0.5.0",
+        "ref": "v0.6.0",
         "repo": "waywallen",
         "type": "github"
       }

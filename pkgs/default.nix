@@ -39,7 +39,7 @@ in
       done
 
       wrapProgram "$out/bin/waywallen" \
-        --add-flags "--ui $out/bin/waywallen-ui --plugin $out/share/waywallen"
+        --add-flags "--ui $out/bin/waywallen-ui --probe $out/bin/waywallen-probe --plugin $out/share/waywallen"
     '';
     passthru = {
       unwrapped = waywallen-unwrapped;

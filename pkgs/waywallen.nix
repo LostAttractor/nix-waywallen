@@ -12,15 +12,16 @@
   libpulseaudio,
   libva,
   linuxHeaders,
+  libxml2,
   waywallen-daemon,
   src,
 }:
 buildLitoPackage {
   pname = "waywallen";
-  version = "0.5.0";
+  version = "0.6.0";
   inherit src;
   patches = [ ./patches/waywallen-external-daemon.patch ];
-  litoHash = "sha256-MnZSGgVk5731hgv32kVbtx8rRCW6dUWwfJhJO/r38E4=";
+  litoHash = "sha256-RCT9laOEXJcaxA91eh1QYF2GdPvyjI6X6rcjFLJkyww=";
 
   nativeBuildInputs = [
     protobuf
@@ -43,6 +44,7 @@ buildLitoPackage {
     libva
     # Qt moc depfiles resolve glibc's symlinks to the kernel header output.
     linuxHeaders
+    libxml2
   ];
 
   dontWrapQtApps = true;
